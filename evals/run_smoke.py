@@ -54,6 +54,53 @@ def main() -> int:
         pareto_path.write_text(json.dumps({"pareto_ids": pareto}) + "\n", encoding="utf-8")
         run(sys.executable, str(SCRIPTS / "validate_pareto.py"), "--representatives", str(reps), "--pareto", str(pareto_path))
 
+        # Benchmark list equality must preserve multiplicity: a repeated name
+        # would otherwise change its weight in the per-benchmark median.
+        base_input = json.loads(input_path.read_text(encoding="utf-8"))
+        base_config = json.loads(config_path.read_text(encoding="utf-8"))
+        for duplicate_side in ("input", "config", "both"):
+            bad_input = json.loads(json.dumps(base_input))
+            bad_config = json.loads(json.dumps(base_config))
+            if duplicate_side in ("input", "both"):
+                bad_input["selected_benchmarks"].append(bad_input["selected_benchmarks"][0])
+            if duplicate_side in ("config", "both"):
+                bad_config["selected_benchmarks"].append(bad_config["selected_benchmarks"][0])
+            bad_input_path = temp_path / f"duplicate-{duplicate_side}-input.json"
+            bad_config_path = temp_path / f"duplicate-{duplicate_side}-config.json"
+            bad_input_path.write_text(json.dumps(bad_input) + "\n", encoding="utf-8")
+            bad_config_path.write_text(json.dumps(bad_config) + "\n", encoding="utf-8")
+            run(sys.executable, str(SCRIPTS / "compute_tradeoff_scores.py"), "--input", str(bad_input_path), "--config", str(bad_config_path), "--output-dir", str(temp_path / f"duplicate-{duplicate_side}-scores"), expect=1)
+            run(sys.executable, str(SCRIPTS / "validate_tradeoff_contract.py"), "--input", str(bad_input_path), "--config", str(bad_config_path), "--representatives", str(reps), expect=1)
+
+        # Excluded benchmark lists are checked too, despite not contributing
+        # to the score calculation.
+        for duplicate_side in ("input", "config"):
+            bad_input = json.loads(json.dumps(base_input))
+            bad_config = json.loads(json.dumps(base_config))
+            duplicate_names = ["Ignored benchmark", "Ignored benchmark"]
+            if duplicate_side == "input":
+                bad_input["excluded_benchmarks"] = duplicate_names
+            else:
+                bad_config["excluded_benchmarks"] = duplicate_names
+            bad_input_path = temp_path / f"duplicate-excluded-{duplicate_side}-input.json"
+            bad_config_path = temp_path / f"duplicate-excluded-{duplicate_side}-config.json"
+            bad_input_path.write_text(json.dumps(bad_input) + "\n", encoding="utf-8")
+            bad_config_path.write_text(json.dumps(bad_config) + "\n", encoding="utf-8")
+            run(sys.executable, str(SCRIPTS / "compute_tradeoff_scores.py"), "--input", str(bad_input_path), "--config", str(bad_config_path), "--output-dir", str(temp_path / f"duplicate-excluded-{duplicate_side}-scores"), expect=1)
+            run(sys.executable, str(SCRIPTS / "validate_tradeoff_contract.py"), "--input", str(bad_input_path), "--config", str(bad_config_path), "--representatives", str(reps), expect=1)
+
+        # Each declared Pareto axis must reject NaN and either infinity.
+        for axis in ("performance_deviation_score", "cost_deviation_score", "latency_deviation_score"):
+            for invalid_value in ("NaN", "Infinity", "-Infinity"):
+                bad_rows = [dict(row) for row in rows]
+                bad_rows[0][axis] = invalid_value
+                bad_reps = temp_path / f"nonfinite-{axis}-{invalid_value}.csv"
+                with bad_reps.open("w", encoding="utf-8", newline="") as handle:
+                    writer = csv.DictWriter(handle, fieldnames=bad_rows[0].keys())
+                    writer.writeheader()
+                    writer.writerows(bad_rows)
+                run(sys.executable, str(SCRIPTS / "validate_pareto.py"), "--representatives", str(bad_reps), "--pareto", str(pareto_path), expect=1)
+
         v15_config_path = ROOT / "references" / "v15_config.example.json"
         v15_config = json.loads(v15_config_path.read_text(encoding="utf-8"))
         v15_ids = [

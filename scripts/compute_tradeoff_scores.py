@@ -125,6 +125,13 @@ def main() -> int:
     source = read_json(args.input)
     config = read_json(args.config)
     selected = list(config["selected_benchmarks"])
+    excluded_names = list(config.get("excluded_benchmarks", []))
+    for label, names in (
+        ("config selected_benchmarks", selected),
+        ("config excluded_benchmarks", excluded_names),
+    ):
+        if len(names) != len(set(names)):
+            raise ValueError(f"{label} must not contain duplicates")
     metrics = config["metrics"]
     standardization = config.get("standardization", {})
     if standardization.get("scope") != "within_benchmark":
@@ -161,7 +168,7 @@ def main() -> int:
     ids = [point["id"] for point in points]
     if len(ids) != len(set(ids)):
         raise ValueError("candidate ids must be unique")
-    excluded = set(config.get("excluded_benchmarks", []))
+    excluded = set(excluded_names)
     if analysis_mode == "three_axis_v15":
         if set(selected) != V15_SELECTED_BENCHMARKS or excluded != V15_EXCLUDED_BENCHMARKS:
             raise ValueError("three_axis_v15 requires the fixed seven selected and two excluded benchmark sets")
@@ -216,7 +223,10 @@ def main() -> int:
     for key in ("selected_benchmarks", "excluded_benchmarks"):
         if key not in source:
             raise ValueError(f"source is missing required {key}")
-        if set(source.get(key, [])) != (set(selected) if key == "selected_benchmarks" else excluded):
+        source_names = source.get(key, [])
+        if len(source_names) != len(set(source_names)):
+            raise ValueError(f"source {key} must not contain duplicates")
+        if set(source_names) != (set(selected) if key == "selected_benchmarks" else excluded):
             raise ValueError(f"source and config {key} do not match")
     expected_count = config.get("candidate_count")
     if expected_count is not None and len(points) != int(expected_count):

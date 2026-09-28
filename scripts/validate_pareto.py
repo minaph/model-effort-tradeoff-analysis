@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 from pathlib import Path
 
 
@@ -34,9 +35,15 @@ def main() -> int:
     errors = []
     for row in rows:
         try:
-            scores[row["id"]] = tuple(float(row[axis]) for axis in args.axes)
+            values = tuple(float(row[axis]) for axis in args.axes)
         except (KeyError, TypeError, ValueError) as exc:
             errors.append(f"{row.get('id')}: invalid axis value ({exc})")
+            continue
+        nonfinite_axes = [axis for axis, value in zip(args.axes, values) if not math.isfinite(value)]
+        if nonfinite_axes:
+            errors.append(f"{row.get('id')}: non-finite axis value(s): {', '.join(nonfinite_axes)}")
+            continue
+        scores[row["id"]] = values
     if errors:
         for error in errors:
             print(f"FAIL: {error}")

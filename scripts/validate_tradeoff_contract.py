@@ -218,8 +218,14 @@ def main() -> int:
     for key in required:
         if key not in config:
             errors.append(f"missing method key {key}")
-    selected = set(config.get("selected_benchmarks", []))
-    excluded = set(config.get("excluded_benchmarks", []))
+    selected_names = config.get("selected_benchmarks", [])
+    excluded_names = config.get("excluded_benchmarks", [])
+    if len(selected_names) != len(set(selected_names)):
+        errors.append("config selected_benchmarks contains duplicates")
+    if len(excluded_names) != len(set(excluded_names)):
+        errors.append("config excluded_benchmarks contains duplicates")
+    selected = set(selected_names)
+    excluded = set(excluded_names)
     if selected & excluded:
         errors.append("selected and excluded benchmarks overlap")
     points = source.get("points", [])
@@ -232,8 +238,12 @@ def main() -> int:
     for key, expected in (("selected_benchmarks", selected), ("excluded_benchmarks", excluded)):
         if key not in source:
             errors.append(f"source is missing required {key}")
-        elif set(source.get(key, [])) != expected:
-            errors.append(f"source and config {key} do not match")
+        else:
+            source_names = source.get(key, [])
+            if len(source_names) != len(set(source_names)):
+                errors.append(f"source {key} contains duplicates")
+            if set(source_names) != expected:
+                errors.append(f"source and config {key} do not match")
 
     analysis_mode = config.get("analysis_mode")
     metric_names = set(config.get("metrics", {}))
