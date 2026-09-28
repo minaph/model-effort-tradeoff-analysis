@@ -1,6 +1,6 @@
 # v15 process reference
 
-This reference records the concrete process from the GPT 5.6 comparison. It is the origin example for the generalized skill; replace the names, counts, URLs, and thresholds when applying the skill elsewhere.
+This reference records the concrete process from the GPT 5.6 comparison. Its names, counts, URLs, and thresholds define the fixed `three_axis_v15` reproduction branch. For another comparison, select `three_axis_generic` and supply that comparison's own configuration; do not edit historical constants while retaining the v15 label.
 
 ## v15 calculation choices
 
@@ -32,6 +32,8 @@ The reader-facing order is:
 5. 遷移グリッド
 6. 距離マップの確かめ方
 7. 性能とタスク別の得意不得意
+
+This is the archived seven-view order. New interactive comparisons also include a benchmark radar view, preferably beside task-specific differences. The radar addition does not change the v15 numerical contract or claim that the archived artifact already contained it. Its spokes are the seven selected benchmarks, with per-benchmark performance scores rather than cross-benchmark medians; follow [radar-chart.md](radar-chart.md).
 
 The grid uses effort low → medium → high → xhigh → max from left to right and model GPT-5.5 → Luna → Terra → Sol from bottom to top. Shapes are max=●, high=◆, medium=■, low=▲, xhigh=⬢; actual SVG geometry is preferred to fragile Unicode glyph rendering. Model color and effort shape are both required.
 

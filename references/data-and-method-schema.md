@@ -26,7 +26,7 @@ Use a stable, explicit schema so the HTML, machine-readable outputs, and reviewe
 }
 ```
 
-Each selected benchmark must have the configured fields for every candidate. Keep benchmark category, group, source metric, raw units, and provenance when available. Never use an excluded composite to reconstruct a missing component.
+Each selected benchmark must have the configured fields for every candidate. Candidate IDs and each selected/excluded benchmark list must be unique; duplicated names are errors, not implicit weights. Keep benchmark category, group, source metric, raw units, and provenance when available. Never use an excluded composite to reconstruct a missing component.
 
 ## Method JSON
 
@@ -86,14 +86,17 @@ Produce, as applicable:
 - fixed grid edges with `from`, `to`, `type`, and `boundary`;
 - MDS coordinates and Shepard pairs with fit/exclusion metadata;
 - reviewed text JSON;
+- benchmark radar JSON with ordered benchmark axes, per-candidate per-benchmark values, and a shared radial domain when a radar view is requested;
 - self-contained HTML and a validation report.
+
+For radar-specific configuration, units, and text bindings, see [radar-chart.md](radar-chart.md). Radar values come from each standardized benchmark record rather than the cross-benchmark representative CSV. With fewer than three selected benchmarks, retain the value table and report the table-only fallback.
 
 For a mode-specific intervention that was considered but not applied, record `applied: false`, the affected mode, and a reason that says the unaffected mode remains unchanged. Do not encode this decision only in prose.
 
 ## Validation invariants
 
 - Candidate IDs are unique and every edge endpoint exists.
-- Selected and excluded benchmark sets are disjoint.
+- Selected and excluded benchmark lists contain no duplicates, and their sets are disjoint.
 - Every selected metric has the expected candidate count or an explicit missing-value report.
 - Cost and latency direction changes are visible in method metadata.
 - Population SD uses denominator `n`; performance spread is not a Pareto axis.
@@ -102,3 +105,5 @@ For a mode-specific intervention that was considered but not applied, record `ap
 - MDS fit/exclusion/projection lists match the displayed coordinates and Shepard pairs.
 - MDS distances use the internal representative z columns, not the reader-facing `50 + 10z` display scale; an affine display transform must not alter the fit geometry.
 - Grid edges are only adjacent in the configured order and are directed from earlier to later order.
+- All Pareto axes must be finite; `NaN` and positive/negative infinity are invalid input, not incomparable candidates.
+- Radar spokes follow selected benchmark order; changing visible candidates must not change scores or radial bounds.
