@@ -1,0 +1,12 @@
+{
+  "selected_benchmarks": ["Task A", "Task B", "Task C"],
+  "excluded_benchmarks": [],
+  "points": [
+    {"id":"Alpha|base","model":"Alpha","effort":"base","raw":{"Task A":{"performance":0.40,"cost":1.00,"latency_min":10.0},"Task B":{"performance":0.50,"cost":1.20,"latency_min":9.0},"Task C":{"performance":0.30,"cost":0.90,"latency_min":11.0}}},
+    {"id":"Alpha|plus","model":"Alpha","effort":"plus","raw":{"Task A":{"performance":0.50,"cost":1.30,"latency_min":11.0},"Task B":{"performance":0.60,"cost":1.40,"latency_min":10.0},"Task C":{"performance":0.45,"cost":1.10,"latency_min":12.0}}},
+    {"id":"Alpha|max","model":"Alpha","effort":"max","raw":{"Task A":{"performance":0.60,"cost":1.80,"latency_min":14.0},"Task B":{"performance":0.68,"cost":1.70,"latency_min":13.0},"Task C":{"performance":0.55,"cost":1.50,"latency_min":15.0}}},
+    {"id":"Beta|base","model":"Beta","effort":"base","raw":{"Task A":{"performance":0.45,"cost":0.80,"latency_min":8.0},"Task B":{"performance":0.55,"cost":0.90,"latency_min":7.0},"Task C":{"performance":0.40,"cost":0.70,"latency_min":9.0}}},
+    {"id":"Beta|plus","model":"Beta","effort":"plus","raw":{"Task A":{"performance":0.58,"cost":1.00,"latency_min":8.5},"Task B":{"performance":0.62,"cost":1.10,"latency_min":8.0},"Task C":{"performance":0.50,"cost":0.85,"latency_min":9.5}}},
+    {"id":"Beta|max","model":"Beta","effort":"max","raw":{"Task A":{"performance":0.70,"cost":1.50,"latency_min":12.0},"Task B":{"performance":0.75,"cost":1.40,"latency_min":11.0},"Task C":{"performance":0.65,"cost":1.20,"latency_min":12.5}}}
+  ]
+}

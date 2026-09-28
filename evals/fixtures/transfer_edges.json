@@ -1,0 +1,11 @@
+{
+  "edges": [
+    {"from":"Alpha|base","to":"Alpha|plus","type":"effort","boundary":false},
+    {"from":"Alpha|plus","to":"Alpha|max","type":"effort","boundary":false},
+    {"from":"Alpha|base","to":"Beta|base","type":"model","boundary":false},
+    {"from":"Alpha|plus","to":"Beta|plus","type":"model","boundary":false},
+    {"from":"Alpha|max","to":"Beta|max","type":"model","boundary":false},
+    {"from":"Beta|base","to":"Beta|plus","type":"effort","boundary":false},
+    {"from":"Beta|plus","to":"Beta|max","type":"effort","boundary":false}
+  ]
+}

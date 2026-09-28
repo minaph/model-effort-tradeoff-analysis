@@ -1,0 +1,39 @@
+{
+  "version": "transfer-fixture",
+  "analysis_mode": "three_axis_generic",
+  "candidate_count": 6,
+  "selected_benchmarks": ["Task A", "Task B", "Task C"],
+  "excluded_benchmarks": [],
+  "model_order": ["Alpha", "Beta"],
+  "effort_order": ["base", "plus", "max"],
+  "metrics": {
+    "performance": {"field":"performance", "direction":1},
+    "cost": {"field":"cost", "direction":-1},
+    "latency": {"field":"latency_min", "direction":-1}
+  },
+  "standardization": {"scope":"within_benchmark", "sd":"population", "log_transform":false},
+  "missing_value_policy":"error",
+  "representative":"median",
+  "display_transform":"50 + 10z",
+  "variability":{"metric":"performance", "stat":"population_sd", "display_scale":10},
+  "adjustments":[],
+  "pareto":{"axes":["performance","cost","latency"], "authoritative":true},
+  "boundary_model_pairs":[],
+  "mds":{
+    "fit_ids":["Alpha|base","Alpha|plus","Alpha|max","Beta|base","Beta|plus","Beta|max"],
+    "excluded_ids":[],
+    "projection_only_ids":[],
+    "fit_count":6,
+    "projection_only_count":0,
+    "edge_source":"grid_adjacency",
+    "distance_method":"metric_mds",
+    "algorithm":"v15_smacof_circle",
+    "iterations":2400,
+    "tolerance":1e-13,
+    "distance_space":"internal_z",
+    "stress_definition":"sqrt(sum of squared pairwise distance residuals)",
+    "relative_rmse_definition":"sqrt(sum residuals squared) / sqrt(sum target distances squared)",
+    "distance_axes":["performance_z_median","cost_z_median","latency_z_median"],
+    "include_boundary_edges":false
+  }
+}
