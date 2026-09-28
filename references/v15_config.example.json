@@ -1,0 +1,121 @@
+{
+  "version": "v15",
+  "analysis_mode": "three_axis_v15",
+  "candidate_count": 19,
+  "selected_benchmarks": [
+    "Agents' Last Exam",
+    "GDPval-AA v2",
+    "DeepSWE v1.1",
+    "Terminal-Bench 2.1",
+    "BrowseComp",
+    "OSWorld 2.0",
+    "AutomationBench"
+  ],
+  "excluded_benchmarks": [
+    "Artificial Analysis Intelligence Index v4.1",
+    "Artificial Analysis Coding Agent Index v1.1"
+  ],
+  "model_order": [
+    "GPT-5.5",
+    "GPT-5.6 Luna",
+    "GPT-5.6 Terra",
+    "GPT-5.6 Sol"
+  ],
+  "effort_order": ["low", "medium", "high", "xhigh", "max"],
+  "metrics": {
+    "performance": {"field": "performance", "direction": 1},
+    "cost": {"field": "cost", "direction": -1},
+    "latency": {"field": "latency_min", "direction": -1}
+  },
+  "standardization": {
+    "scope": "within_benchmark",
+    "sd": "population",
+    "log_transform": false
+  },
+  "missing_value_policy": "error",
+  "representative": "median",
+  "display_transform": "50 + 10z",
+  "variability": {
+    "metric": "performance",
+    "stat": "population_sd",
+    "display_scale": 10
+  },
+  "adjustments": [
+    {
+      "model": "GPT-5.6 Luna",
+      "metric": "cost",
+      "multiplier": 0.2,
+      "mode": "normal",
+      "effective_date": "2026-07-30",
+      "source_url": "https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/",
+      "provenance_status": "reviewed"
+    },
+    {
+      "model": "GPT-5.6 Terra",
+      "metric": "cost",
+      "multiplier": 0.8,
+      "mode": "normal",
+      "effective_date": "2026-07-30",
+      "source_url": "https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/",
+      "provenance_status": "reviewed"
+    }
+  ],
+  "non_applied_interventions": [
+    {
+      "model": "GPT-5.6 Sol",
+      "metric": "latency",
+      "mode": "fast",
+      "applied": false,
+      "reason": "The claim is Fast-mode only; it is not applied to normal-mode latency, which remains unchanged.",
+      "source_url": "https://openai.com/index/gpt-5-6/",
+      "provenance_status": "reviewed"
+    }
+  ],
+  "pareto": {
+    "axes": ["performance", "cost", "latency"],
+    "authoritative": true
+  },
+  "boundary_model_pairs": [["GPT-5.5", "GPT-5.6 Luna"]],
+  "mds": {
+    "fit_ids": [
+      "GPT-5.6 Sol|low",
+      "GPT-5.6 Sol|medium",
+      "GPT-5.6 Sol|high",
+      "GPT-5.6 Sol|xhigh",
+      "GPT-5.6 Luna|low",
+      "GPT-5.6 Luna|medium",
+      "GPT-5.6 Luna|high",
+      "GPT-5.6 Luna|xhigh",
+      "GPT-5.6 Luna|max",
+      "GPT-5.6 Terra|low",
+      "GPT-5.6 Terra|medium",
+      "GPT-5.6 Terra|high",
+      "GPT-5.6 Terra|xhigh",
+      "GPT-5.6 Terra|max",
+      "GPT-5.6 Sol|max"
+    ],
+    "anchor_ids": ["GPT-5.6 Sol|max"],
+    "expected_pareto_count": 14,
+    "excluded_model_names": ["GPT-5.5"],
+    "excluded_ids": [
+      "GPT-5.5|low",
+      "GPT-5.5|medium",
+      "GPT-5.5|high",
+      "GPT-5.5|xhigh"
+    ],
+    "projection_only_ids": [],
+    "fit_count": 15,
+    "projection_only_count": 0,
+    "edge_source": "grid_adjacency",
+    "distance_method": "metric_mds",
+    "algorithm": "v15_smacof_circle",
+    "iterations": 2400,
+    "tolerance": 1e-13,
+    "distance_space": "internal_z",
+    "stress_definition": "sqrt(sum of squared pairwise distance residuals)",
+    "relative_rmse_definition": "sqrt(sum residuals squared) / sqrt(sum target distances squared)",
+    "distance_axes": ["performance_z_median", "cost_z_median", "latency_z_median"],
+    "display_rotation": "post_fit_only",
+    "include_boundary_edges": false
+  }
+}

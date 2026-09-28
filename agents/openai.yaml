@@ -1,0 +1,14 @@
+interface:
+  display_name: Model × Effort Trade-off Analysis
+  short_description: Build auditable model-effort comparisons
+  default_prompt: Use $model-effort-tradeoff-analysis to compare these model×effort
+    candidates across benchmarks.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

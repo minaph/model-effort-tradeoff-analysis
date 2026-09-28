@@ -1,0 +1,14 @@
+# Local agent runtime state
+/~/
+
+# Python runtime and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local configuration and OS metadata
+.env
+.env.*
+!.env.example
+.DS_Store
